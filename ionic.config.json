@@ -1,0 +1,7 @@
+{
+  "name": "TrackMobile",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

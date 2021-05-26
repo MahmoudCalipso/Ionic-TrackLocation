@@ -1,0 +1,21 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start"> 
+      <ion-menu-button autoHide="false" ></ion-menu-button>
+    </ion-buttons>
+    <ion-title>List Of Tracking</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+   <ion-list *ngFor="let track of tracks$ | async">
+     <ion-item >
+         <ion-title>{{this.track.location['StartDate'] | date}} - {{this.track.location['EndDate']}}</ion-title>
+         <ion-text> {{this.track.car['Matricule']}} </ion-text>
+         <ion-button color="primary" onclick="getTrackSelected(this.track.UserId,this.track.LocationId)">
+          <ion-icon name="analytics-outline"></ion-icon>
+         </ion-button>
+         
+     </ion-item>
+   </ion-list>
+</ion-content>

@@ -1,0 +1,23 @@
+<ion-header>
+  <ion-toolbar>   
+    <ion-buttons slot="start"> 
+      <ion-menu-button autoHide="false" ></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Information Account</ion-title>
+  </ion-toolbar>
+   
+</ion-header>
+
+<ion-content>
+   <ion-card>
+     <ion-card-header> Your Detail Info </ion-card-header>
+     <ion-card-content>
+       <div class="container"> 
+           <h1 class="style_p">User Name : {{ UserAccount.FirstName}} {{ UserAccount.LastName}} </h1>
+           <h1 class="style_p">User Email : {{ UserAccount.Email}}  </h1>
+           <h1 class="style_p">User CIN : {{ UserAccount.Cin}}  </h1>
+           <h1 class="style_p">User Num° Tel : {{ UserAccount.NumTel}}  </h1>
+       </div>
+     </ion-card-content>
+   </ion-card>
+</ion-content>

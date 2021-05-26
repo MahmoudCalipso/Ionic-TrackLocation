@@ -1,0 +1,22 @@
+<ion-app>
+<ion-split-pane contentId="main-content" type="overlay" >
+<ion-menu contentId="main-content">
+  <ion-header>
+    <ion-toolbar color="primary">
+      <ion-title>Start Menu</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <ion-list>
+      <ion-item><a routerLink="['tracking']" >Start Tracking</a></ion-item>
+      <ion-item><a routerLink="['list-tracking']">List Tracking</a></ion-item>
+      <ion-item><a routerLink="['dashboard-static']">Dashboard Static</a></ion-item>
+      <ion-item><a routerLink="['account']">Account Info</a></ion-item>
+      <ion-item><a onclick="logOut()">Logout</a></ion-item>
+    </ion-list>
+  </ion-content>
+</ion-menu>
+<ion-router-outlet main id="main-content"></ion-router-outlet>
+</ion-split-pane>
+</ion-app>
+

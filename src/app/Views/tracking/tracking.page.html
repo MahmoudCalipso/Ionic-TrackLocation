@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-toolbar>  
+    <ion-buttons slot="start"> 
+      <ion-menu-button autoHide="false" ></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Track Your Location</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form formGroup="submitform" (ngSubmit)="startTracking()" >
+ <ion-card>
+   <ion-header>Chose your car </ion-header>
+   <ion-content>
+   <ion-item>
+    <ion-label>Cars</ion-label>
+    <ion-select formControlName="car">
+      <ion-select-option >Select Car</ion-select-option>
+      <ion-select-option *ngFor="let car of cars" value={{car.CarID}} >{{car.Matricule}} </ion-select-option>
+     
+    </ion-select>
+  </ion-item>
+ </ion-content>
+ </ion-card>
+ <ion-button expand="block" (click)="startTracking()" *ngIf="!isTracking">
+  <ion-icon name="locate" slot="start"></ion-icon>
+  Start Tracking
+</ion-button>
+
+<ion-button expand="block" (click)="stopTracking()" *ngIf="isTracking">
+  <ion-icon name="hand" slot="start"></ion-icon>
+  Stop Tracking
+</ion-button>
+
+ <!--  Map   -->
+     <div class="mapview">
+         <ion-content #map id="map"></ion-content>
+     </div>
+  </form>
+</ion-content>
