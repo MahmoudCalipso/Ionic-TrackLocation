@@ -1,12 +1,9 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './guards/auth.guard';
-import { MenuPage } from './Views/menu/menu.page';
+
 const routes: Routes = [
-  {
-    path: 'nav',
-    component: MenuPage,
-    children: [
+
       {
         path: 'home',
         loadChildren: () => import('./home/home.module').then(m => m.HomePageModule),
@@ -32,7 +29,7 @@ const routes: Routes = [
         canLoad: [AuthGuard]
       },
       {
-        path: 'show-track',
+        path: 'show-track/:userId/:locId',
         loadChildren: () => import('./Views/show-track/show-track.module').then(m => m.ShowTrackPageModule),
         canLoad: [AuthGuard]
       },
@@ -41,12 +38,6 @@ const routes: Routes = [
         redirectTo: 'home',
         pathMatch: 'full'
       }
-    ]
-  },
-  {
-    path: 'sign-in',
-    loadChildren: () => import('./Views/sign-in/sign-in.module').then(m => m.SignInPageModule)
-  },
 
 ];
 

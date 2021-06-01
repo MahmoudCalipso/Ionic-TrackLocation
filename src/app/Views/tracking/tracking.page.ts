@@ -34,8 +34,6 @@ export class TrackingPage implements OnInit {
   locationid: number;
   carmat: number;
   constructor(
-    private plt: Platform,
-    private navCtrl: NavController,
     private geolocation: Geolocation,
     private androidPermissions: AndroidPermissions,
     private locationAccuracy: LocationAccuracy,
