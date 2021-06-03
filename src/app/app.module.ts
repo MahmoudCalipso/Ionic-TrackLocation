@@ -7,31 +7,29 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { TrackingPage } from './Views/tracking/tracking.page';
-import { SignInPage } from './Views/sign-in/sign-in.page';
-import { ShowTrackPage } from './Views/show-track/show-track.page';
-import { ListTrackingPage } from './Views/list-tracking/list-tracking.page';
+import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
+import { Storage  } from '@ionic/storage';
+import { HomePage } from './home/home.page';
 import { AccountPage } from './Views/account/account.page';
-import { MenuPage } from './Views/menu/menu.page';
+import { ListTrackingPage } from './Views/list-tracking/list-tracking.page';
+import { ShowTrackPage } from './Views/show-track/show-track.page';
+import { SignInPage } from './Views/sign-in/sign-in.page';
+import { TrackingPage } from './Views/tracking/tracking.page';
 import { HomePageModule } from './home/home.module';
 import { AccountPageModule } from './Views/account/account.module';
 import { ListTrackingPageModule } from './Views/list-tracking/list-tracking.module';
 import { ShowTrackPageModule } from './Views/show-track/show-track.module';
 import { SignInPageModule } from './Views/sign-in/sign-in.module';
 import { TrackingPageModule } from './Views/tracking/tracking.module';
-import { MenuPageModule } from './Views/menu/menu.module';
-import { HomePage } from './home/home.page';
-import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
-
+import { IonicStorageModule } from '@ionic/storage-angular';
 
 
 @NgModule({
-  declarations: [AppComponent  ],
+  declarations: [AppComponent],
   entryComponents: [
     TrackingPage,
     SignInPage,
@@ -48,15 +46,15 @@ import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
     FormsModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
+    IonicModule.forRoot(),
+    IonicStorageModule.forRoot(),
+    AppRoutingModule,
     TrackingPageModule,
     SignInPageModule,
     ShowTrackPageModule,
     ListTrackingPageModule,
     AccountPageModule,
     HomePageModule,
-    IonicModule.forRoot(),
-    AppRoutingModule,
-    NgbModule
   ],
   providers: [
     Storage,

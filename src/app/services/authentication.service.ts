@@ -1,12 +1,10 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, from, Subject, of } from 'rxjs';
-import { map, tap, switchMap, catchError } from 'rxjs/operators';
-import { Plugins } from '@capacitor/core';
-import { AlertController, Platform } from '@ionic/angular';
-import { JwtHelperService } from '@auth0/angular-jwt';
+import { BehaviorSubject, from, of } from 'rxjs';
+import { tap, switchMap, catchError } from 'rxjs/operators';
+import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
-const { Storage } = Plugins;
+import { Storage  } from '@ionic/storage';
 
 const AUTH_API = 'http://localhost:5000/api/Authentication/';
 const TOKEN_KEY = 'auth-token';
@@ -36,7 +34,7 @@ export class AuthenticationService {
   }
 
   async loadToken() {
-    const token = await Storage.get({ key: TOKEN_KEY });
+    const token = await this.storage.get( TOKEN_KEY );
     if (token && token.value) {
       console.log('set token: ', token.value);
       this.token = token.value;
@@ -49,11 +47,11 @@ export class AuthenticationService {
   login(credentials: { email, password }) {
     return this.http.post<any>(AUTH_API + 'signin', credentials).pipe(
       tap(res => {
-        const tokenKey =  this.storage.setItem(TOKEN_KEY, res.token);
-        const createdby = this.storage.setItem(USER_CREATEDBY, res.CreatedByAdminID);
-        const user = this.storage.setItem(USER_INFO, res);
-        const useremail = this.storage.setItem(USER_EMAIL, res.Email);
-        const userid = this.storage.setItem(USER_ID, res.UserId);
+        const tokenKey =  this.storage.set(TOKEN_KEY, res.token);
+        const createdby = this.storage.set(USER_CREATEDBY, res.CreatedByAdminID);
+        const user = this.storage.set(USER_INFO, res);
+        const useremail = this.storage.set(USER_EMAIL, res.Email);
+        const userid = this.storage.set(USER_ID, res.UserId);
         console.log(res);
         return from(Promise.all([tokenKey, user]));
       }),
@@ -81,11 +79,11 @@ export class AuthenticationService {
       switchMap(_ => {
         this.currentAccessToken = null;
         // Remove all stored tokens
-        const createdby = this.storage.remove({ key: USER_CREATEDBY });
-        const useremail = this.storage.remove({ key: USER_EMAIL });
-        const userid = this.storage.remove({ key: USER_ID });
-        const tokenKey = this.storage.remove({ key: TOKEN_KEY});
-        const user =  this.storage.remove({ key: USER_INFO });
+        const createdby = this.storage.remove( USER_CREATEDBY );
+        const useremail = this.storage.remove(  USER_EMAIL );
+        const userid = this.storage.remove(USER_ID );
+        const tokenKey = this.storage.remove( TOKEN_KEY );
+        const user =  this.storage.remove( USER_INFO );
         return from(Promise.all([tokenKey, user]));
       }),
       tap(_ => {
@@ -96,15 +94,15 @@ export class AuthenticationService {
   }
 
   getNewAccessToken() {
-    const refreshToken = from(Storage.get({ key: TOKEN_KEY }));
+    const refreshToken = from(Storage.call({ key: TOKEN_KEY }));
     return refreshToken.pipe(
       switchMap(token => {
-        if (token && token.value) {
+        if (token) {
           // tslint:disable-next-line: no-shadowed-variable
           const httpOptions = {
             headers: new HttpHeaders({
               'Content-Type': 'application/json',
-              Authorization: `Bearer ${token.value}`
+              Authorization: `Bearer ${token}`
             })
           };
           return this.http.get(AUTH_API + '/refresh-token', httpOptions);
@@ -118,6 +116,6 @@ export class AuthenticationService {
    // Store a new access token
    storeAccessToken(accessToken) {
     this.currentAccessToken = accessToken;
-    return from(Storage.set({ key: TOKEN_KEY, value: accessToken }));
+    return this.storage.set( TOKEN_KEY, accessToken );
   }
 }
