@@ -26,6 +26,10 @@ import { ShowTrackPageModule } from './Views/show-track/show-track.module';
 import { SignInPageModule } from './Views/sign-in/sign-in.module';
 import { TrackingPageModule } from './Views/tracking/tracking.module';
 import { IonicStorageModule } from '@ionic/storage-angular';
+import { AuthenticationService } from './services/authentication.service';
+import { AuthGuard } from './guards/auth.guard';
+import { MenuPageModule } from './Views/menu/menu.module';
+import { MenuPage } from './Views/menu/menu.page';
 
 
 @NgModule({
@@ -35,6 +39,7 @@ import { IonicStorageModule } from '@ionic/storage-angular';
     SignInPage,
     ShowTrackPage,
     ListTrackingPage,
+    MenuPage,
     AccountPage,
     HomePage
   ],
@@ -48,6 +53,7 @@ import { IonicStorageModule } from '@ionic/storage-angular';
     BrowserAnimationsModule,
     IonicModule.forRoot(),
     IonicStorageModule.forRoot(),
+    MenuPageModule,
     AppRoutingModule,
     TrackingPageModule,
     SignInPageModule,
@@ -65,6 +71,8 @@ import { IonicStorageModule } from '@ionic/storage-angular';
       provide: RouteReuseStrategy,
       useClass: IonicRouteStrategy
     },
+    AuthenticationService,
+    AuthGuard,
     AndroidPermissions,
     Geolocation,
     LocationAccuracy,

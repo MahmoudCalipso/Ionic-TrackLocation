@@ -10,6 +10,7 @@ import { TrackingService } from 'src/app/services/tracking.service';
   styleUrls: ['./list-tracking.page.scss'],
 })
 export class ListTrackingPage implements OnInit {
+  currentPageTitle = 'Liste Tracking';
   UserId: number;
   locid: number;
   tracks$: Observable<TrackModule[]>;

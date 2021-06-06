@@ -1,17 +1,22 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './guards/auth.guard';
+import { MenuPage } from './Views/menu/menu.page';
 
 const routes: Routes = [
-
+  {
+    path: '',
+    component: MenuPage,
+    children: [
       {
         path: 'home',
         loadChildren: () => import('./home/home.module').then(m => m.HomePageModule),
         canLoad: [AuthGuard]
       },
       {
-        path: 'sign-in',
-        loadChildren: () => import('./Views/sign-in/sign-in.module').then(m => m.SignInPageModule)
+        path: '',
+        redirectTo: 'home',
+        pathMatch: 'full'
       },
       {
         path: 'tracking',
@@ -33,12 +38,11 @@ const routes: Routes = [
         loadChildren: () => import('./Views/show-track/show-track.module').then(m => m.ShowTrackPageModule),
         canLoad: [AuthGuard]
       },
+    ]},
       {
-        path: '',
-        redirectTo: 'home',
-        pathMatch: 'full'
+        path: 'sign-in',
+        loadChildren: () => import('./Views/sign-in/sign-in.module').then(m => m.SignInPageModule)
       }
-
 ];
 
 @NgModule({

@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, from, of } from 'rxjs';
+import { BehaviorSubject, from, Observable, of } from 'rxjs';
 import { tap, switchMap, catchError } from 'rxjs/operators';
 import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
@@ -13,8 +13,14 @@ const USER_CREATEDBY = 'auth-createdBy';
 const USER_EMAIL = 'auth-email';
 const USER_ID = 'auth-id';
 
-const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+let httpOptions = {
+  headers: new HttpHeaders({
+    'Content-Type':  'application/json',
+    'Access-Control-Allow-Credentials' : 'true',
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, PATCH, DELETE, PUT, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With',
+  })
 };
 @Injectable({
   providedIn: 'root'
@@ -35,7 +41,7 @@ export class AuthenticationService {
 
   async loadToken() {
     const token = await this.storage.get( TOKEN_KEY );
-    if (token && token.value) {
+    if (token) {
       console.log('set token: ', token.value);
       this.token = token.value;
       this.isAuthenticated.next(true);
@@ -44,16 +50,16 @@ export class AuthenticationService {
     }
   }
 
-  login(credentials: { email, password }) {
-    return this.http.post<any>(AUTH_API + 'signin', credentials).pipe(
+  async login(credentials: { email, password }): Promise<Observable<any>>{
+    return await this.http.post<any>(AUTH_API + 'signin', credentials).pipe(
       tap(res => {
-        const tokenKey =  this.storage.set(TOKEN_KEY, res.token);
-        const createdby = this.storage.set(USER_CREATEDBY, res.CreatedByAdminID);
-        const user = this.storage.set(USER_INFO, res);
-        const useremail = this.storage.set(USER_EMAIL, res.Email);
-        const userid = this.storage.set(USER_ID, res.UserId);
-        console.log(res);
-        return from(Promise.all([tokenKey, user]));
+       this.storage.set(TOKEN_KEY, res.token);
+       this.storage.set(USER_CREATEDBY, res.CreatedByAdminID);
+       this.storage.set(USER_INFO, res);
+       this.storage.set(USER_EMAIL, res.Email);
+       this.storage.set(USER_ID, res.UserId);
+       console.log(res);
+       return from(Promise.all([TOKEN_KEY, USER_CREATEDBY, USER_ID ]));
       }),
       tap(_ => {
         this.isAuthenticated.next(true);
@@ -74,38 +80,36 @@ export class AuthenticationService {
     // tslint:disable-next-line: no-shadowed-variable
     alert.then(alert => alert.present());
   }
-  logout() {
+  logout(){
     return this.http.post(AUTH_API + 'logout', {}).pipe(
       switchMap(_ => {
         this.currentAccessToken = null;
-        // Remove all stored tokens
-        const createdby = this.storage.remove( USER_CREATEDBY );
-        const useremail = this.storage.remove(  USER_EMAIL );
-        const userid = this.storage.remove(USER_ID );
-        const tokenKey = this.storage.remove( TOKEN_KEY );
-        const user =  this.storage.remove( USER_INFO );
-        return from(Promise.all([tokenKey, user]));
+        this.storage.remove( USER_CREATEDBY );
+        this.storage.remove(  USER_EMAIL );
+        this.storage.remove(USER_ID );
+        this.storage.remove( TOKEN_KEY );
+        this.storage.remove( USER_INFO );
+        return from(Promise.all([TOKEN_KEY, USER_CREATEDBY, USER_ID ]));
       }),
       tap(_ => {
         this.isAuthenticated.next(false);
-        this.router.navigateByUrl('/login', { replaceUrl: true });
+        this.router.navigateByUrl('/sign-in', { replaceUrl: true });
       })
     ).subscribe();
   }
 
   getNewAccessToken() {
-    const refreshToken = from(Storage.call({ key: TOKEN_KEY }));
+    const refreshToken = from(this.storage.get( TOKEN_KEY ));
     return refreshToken.pipe(
       switchMap(token => {
         if (token) {
-          // tslint:disable-next-line: no-shadowed-variable
-          const httpOptions = {
+           httpOptions = {
             headers: new HttpHeaders({
               'Content-Type': 'application/json',
               Authorization: `Bearer ${token}`
             })
           };
-          return this.http.get(AUTH_API + '/refresh-token', httpOptions);
+           return this.http.get(AUTH_API + '/refresh-token', httpOptions);
         } else {
           // No stored refresh token
           return of(null);

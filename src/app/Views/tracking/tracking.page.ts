@@ -19,6 +19,7 @@ declare var google;
   styleUrls: ['./tracking.page.scss'],
 })
 export class TrackingPage implements OnInit {
+  currentPageTitle = 'Tracking Location';
   @ViewChild('map') mapElement: ElementRef;
   map: any;
   createdByUserId: number;

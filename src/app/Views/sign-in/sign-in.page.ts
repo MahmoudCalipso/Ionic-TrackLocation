@@ -10,7 +10,7 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
   styleUrls: ['./sign-in.page.scss'],
 })
 export class SignInPage implements OnInit {
-
+  currentPageTitle = 'Sign-in';
   credentials: FormGroup;
 
   constructor(
@@ -32,7 +32,7 @@ export class SignInPage implements OnInit {
     const loading = await this.loadingController.create();
     await loading.present();
 
-    this.authService.login(this.credentials.value).subscribe(
+    (await this.authService.login(this.credentials.value)).subscribe(
       async (res) => {
         await loading.dismiss();
         this.router.navigateByUrl('/home', { replaceUrl: true });

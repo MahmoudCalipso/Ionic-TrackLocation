@@ -13,6 +13,7 @@ import { UserService } from 'src/app/services/user.service';
 export class AccountPage implements OnInit {
   UserId: number;
   UserAccount: UserModule;
+  currentPageTitle = 'Account Info';
 
   constructor(private router: Router,
               private userService: UserService,

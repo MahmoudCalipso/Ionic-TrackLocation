@@ -21,7 +21,7 @@ export class ShowTrackPage implements OnInit {
   position: any;
   latitude: number;
   longitude: number;
-
+  currentPageTitle = 'Show Track Location';
 
   constructor(private trackingService: TrackingService,
               private route: ActivatedRoute,

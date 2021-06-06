@@ -1,10 +1,12 @@
-<ion-header>
+<ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">Sign In</ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Sign In</ion-title>
   </ion-toolbar>
 </ion-header>
-
-<ion-content [fullscreen]>
+<ion-content [fullscreen]="true">
   <form (ngSubmit)="login()" [formGroup]="credentials">
   <ion-card>
     <img src="/assets/photo/login.png" size="30%"/>
@@ -21,7 +23,4 @@
     <input style="width: 100%;" type="submit" class="btn btn-outline-success" value="Submit"/>  
     </ion-item>
   </form> 
-   
-     
-
 </ion-content>
