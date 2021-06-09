@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import {  Platform } from '@ionic/angular';
-import { Storage } from '@ionic/storage';
 import { AuthenticationService } from './services/authentication.service';
 
 @Component({
