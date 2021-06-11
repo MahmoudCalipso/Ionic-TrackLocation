@@ -11,6 +11,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { LocationModule } from 'src/app/modules/location/location.module';
 import { TrackModule } from 'src/app/modules/track/track.module';
 import { catchError, map } from 'rxjs/operators';
+import { Storage } from '@capacitor/storage';
 declare var google;
 
 @Component({
@@ -22,8 +23,8 @@ export class TrackingPage implements OnInit {
   currentPageTitle = 'Tracking Location';
   @ViewChild('map') mapElement: ElementRef;
   map: any;
-  createdByUserId: number;
-  UserId: number;
+  createdByUserId: any;
+  UserId: any;
   times: any;
   isTracking: boolean;
   trackedRoute: any[];
@@ -39,7 +40,6 @@ export class TrackingPage implements OnInit {
     private androidPermissions: AndroidPermissions,
     private locationAccuracy: LocationAccuracy,
     private trackingService: TrackingService,
-    private storage: Storage,
     private carService: CarService,
     private formBuilder: FormBuilder,
     private toastController: ToastController
@@ -51,8 +51,8 @@ export class TrackingPage implements OnInit {
   }
 
   ngOnInit() {
-    parseInt(this.storage.getItem('USER_CREATEDBY'), this.createdByUserId);
-    parseInt(this.storage.getItem('USER_ID'), this.UserId);
+    this.createdByUserId = Storage.get({key: 'USER_CREATEDBY'});
+    this.UserId = Storage.get({key: 'USER_ID'});
     this.checkAppGpsPermission();
     this.getAllCars();
     this.isTracking = false;
@@ -115,7 +115,7 @@ export class TrackingPage implements OnInit {
       });
       return;
     }
-    const userid = this.storage.getItem('UserId');
+    const userid = Storage.get({key: 'UserId'});
     const carid = this.submitform.value();
     this.location.StartDate = new Date(Date.parse(Date()));
     this.location.CarId = carid;

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Storage } from '@ionic/storage-angular';
+import { Storage } from '@capacitor/storage';
 import { AuthenticationService } from '../services/authentication.service';
 
 @Component({
@@ -9,13 +9,12 @@ import { AuthenticationService } from '../services/authentication.service';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage implements OnInit {
-
+  currentPageTitle = 'Home';
   constructor(private authService: AuthenticationService,
-              private router: Router,
-              private storage: Storage) {
+              private router: Router) {
   }
   ngOnInit() {
-    if (this.storage.get('TOKEN_KEY') == null && !this.authService.isAuthenticated ) {
+    if (Storage.get({ key: 'TOKEN_KEY'}) == null && !this.authService.isAuthenticated ) {
       this.router.navigate(['/sign-in']);
     }
 

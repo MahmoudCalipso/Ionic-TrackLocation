@@ -7,17 +7,18 @@ const routes: Routes = [
   {
     path: '',
     component: MenuPage,
+    canLoad: [AuthGuard],
     children: [
       {
         path: 'home',
         loadChildren: () => import('./home/home.module').then(m => m.HomePageModule),
         canLoad: [AuthGuard]
       },
-      {
-        path: '',
-        redirectTo: 'home',
-        pathMatch: 'full'
-      },
+      // {
+      //   path: '',
+      //   redirectTo: 'home',
+      //   pathMatch: 'full'
+      // },
       {
         path: 'tracking',
         loadChildren: () => import('./Views/tracking/tracking.module').then(m => m.TrackingPageModule),
@@ -38,11 +39,13 @@ const routes: Routes = [
         loadChildren: () => import('./Views/show-track/show-track.module').then(m => m.ShowTrackPageModule),
         canLoad: [AuthGuard]
       },
-    ]},
-      {
-        path: 'sign-in',
-        loadChildren: () => import('./Views/sign-in/sign-in.module').then(m => m.SignInPageModule)
-      }
+    ]
+  },
+    {
+      path: 'sign-in',
+      pathMatch: 'full',
+      loadChildren: () => import('./Views/sign-in/sign-in.module').then(m => m.SignInPageModule)
+    }
 ];
 
 @NgModule({

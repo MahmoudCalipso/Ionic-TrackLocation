@@ -4,7 +4,7 @@ import { BehaviorSubject, from, Observable, of } from 'rxjs';
 import { tap, switchMap, catchError } from 'rxjs/operators';
 import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
-import { Storage  } from '@ionic/storage';
+import { Storage } from '@capacitor/storage';
 
 const AUTH_API = 'http://localhost:5000/api/Authentication/';
 const TOKEN_KEY = 'auth-token';
@@ -34,13 +34,13 @@ export class AuthenticationService {
   useremail: void;
   userid: void;
 
-  constructor(private http: HttpClient, private router: Router, private alertController: AlertController,
-              private storage: Storage) {
+  constructor(private http: HttpClient, private router: Router,
+              private alertController: AlertController ) {
     this.loadToken();
   }
 
   async loadToken() {
-    const token = await this.storage.get( TOKEN_KEY );
+    const token = await Storage.get( {key: 'TOKEN_KEY'} );
     if (token) {
       console.log('set token: ', token.value);
       this.token = token.value;
@@ -51,15 +51,15 @@ export class AuthenticationService {
   }
 
   async login(credentials: { email, password }): Promise<Observable<any>>{
-    return await this.http.post<any>(AUTH_API + 'signin', credentials).pipe(
+    return this.http.post<any>(AUTH_API + 'signin', credentials).pipe(
       tap(res => {
-       this.storage.set(TOKEN_KEY, res.token);
-       this.storage.set(USER_CREATEDBY, res.CreatedByAdminID);
-       this.storage.set(USER_INFO, res);
-       this.storage.set(USER_EMAIL, res.Email);
-       this.storage.set(USER_ID, res.UserId);
-       console.log(res);
-       return from(Promise.all([TOKEN_KEY, USER_CREATEDBY, USER_ID ]));
+        Storage.set({key: 'TOKEN_KEY' , value: res.token});
+        Storage.set({key: 'USER_CREATEDBY', value: res.CreatedByAdminID});
+        Storage.set({key: 'USER_INFO', value: JSON.stringify(res)});
+        Storage.set({key: 'USER_EMAIL', value: res.Email});
+        Storage.set({key: 'USER_ID', value: res.UserId});
+        console.log(res);
+        return from(Promise.all([TOKEN_KEY, USER_CREATEDBY, USER_ID]));
       }),
       tap(_ => {
         this.isAuthenticated.next(true);
@@ -84,11 +84,11 @@ export class AuthenticationService {
     return this.http.post(AUTH_API + 'logout', {}).pipe(
       switchMap(_ => {
         this.currentAccessToken = null;
-        this.storage.remove( USER_CREATEDBY );
-        this.storage.remove(  USER_EMAIL );
-        this.storage.remove(USER_ID );
-        this.storage.remove( TOKEN_KEY );
-        this.storage.remove( USER_INFO );
+        Storage.remove({key: 'TOKEN_KEY' });
+        Storage.remove({key: 'USER_CREATEDBY'});
+        Storage.remove({key: 'USER_INFO'});
+        Storage.remove({key: 'USER_EMAIL'});
+        Storage.remove({key: 'USER_ID'});
         return from(Promise.all([TOKEN_KEY, USER_CREATEDBY, USER_ID ]));
       }),
       tap(_ => {
@@ -99,7 +99,7 @@ export class AuthenticationService {
   }
 
   getNewAccessToken() {
-    const refreshToken = from(this.storage.get( TOKEN_KEY ));
+    const refreshToken = from(Storage.get( {key: 'TOKEN_KEY' }));
     return refreshToken.pipe(
       switchMap(token => {
         if (token) {
@@ -120,6 +120,6 @@ export class AuthenticationService {
    // Store a new access token
    storeAccessToken(accessToken) {
     this.currentAccessToken = accessToken;
-    return this.storage.set( TOKEN_KEY, accessToken );
+    return Storage.set( {key: 'TOKEN_KEY', value: accessToken} );
   }
 }

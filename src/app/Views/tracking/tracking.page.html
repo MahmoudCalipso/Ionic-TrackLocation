@@ -1,4 +1,4 @@
-<ion-header>
+<ion-header [translucent]="true">
   <ion-toolbar>  
     <ion-buttons slot="start"> 
       <ion-menu-button autoHide="true" ></ion-menu-button>
@@ -7,8 +7,8 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <form formGroup="submitform" (ngSubmit)="startTracking()" >
+<ion-content [fullscreen]="true">
+  <form [formGroup]="submitform" (ngSubmit)="startTracking()" >
  <ion-card>
    <ion-header>Chose your car </ion-header>
    <ion-content>
@@ -16,7 +16,7 @@
     <ion-label>Cars</ion-label>
     <ion-select formControlName="car">
       <ion-select-option >Select Car</ion-select-option>
-      <ion-select-option *ngFor="let car of cars" value={{car.CarID}} >{{car.Matricule}} </ion-select-option>
+      <ion-select-option *ngFor="let car of cars" value={{car.CarID}} [(ngModel)]="car.Matricule">{{car.Matricule}} </ion-select-option>
      
     </ion-select>
   </ion-item>

@@ -1,8 +1,5 @@
 import { Component, OnInit} from '@angular/core';
 import { Router } from '@angular/router';
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { Platform } from '@ionic/angular';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 @Component({
   selector: 'app-menu',

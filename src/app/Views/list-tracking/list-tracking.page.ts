@@ -3,7 +3,7 @@ import {  Router } from '@angular/router';
 import {  Observable, throwError } from 'rxjs';
 import { TrackModule } from 'src/app/modules/track/track.module';
 import { TrackingService } from 'src/app/services/tracking.service';
-
+import { Storage } from '@capacitor/storage';
 @Component({
   selector: 'app-list-tracking',
   templateUrl: './list-tracking.page.html',
@@ -11,15 +11,14 @@ import { TrackingService } from 'src/app/services/tracking.service';
 })
 export class ListTrackingPage implements OnInit {
   currentPageTitle = 'Liste Tracking';
-  UserId: number;
+  UserId: any;
   locid: number;
   tracks$: Observable<TrackModule[]>;
   constructor(private trackingService: TrackingService,
-              private storage: Storage,
               private router: Router) { }
 
   ngOnInit() {
-    parseInt(this.storage.getItem('USER_ID'), this.UserId);
+    this.UserId = Storage.get({key: 'USER_ID'});
     this.getAllTrackingForDriver(this.UserId);
     this.getTrackSelected(this.UserId, this.locid);
   }

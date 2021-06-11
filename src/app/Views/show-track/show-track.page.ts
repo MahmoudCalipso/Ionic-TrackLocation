@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { LocationModule } from 'src/app/modules/location/location.module';
 import { TrackModule } from 'src/app/modules/track/track.module';
 import { TrackingService } from 'src/app/services/tracking.service';
+import { Storage } from '@capacitor/storage';
 declare var google;
 
 @Component({
@@ -25,7 +26,6 @@ export class ShowTrackPage implements OnInit {
 
   constructor(private trackingService: TrackingService,
               private route: ActivatedRoute,
-              private rouer: Router,
               private geolocation: Geolocation
             ) { }
 
